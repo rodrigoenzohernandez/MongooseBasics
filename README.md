@@ -1,5 +1,7 @@
 node-express-mongo-training
 
+
+
 # Mongoose basics
 
 Mongoose provides a straight-forward, schema-based solution to model your application data. It includes built-in type casting, validation, query building, business logic hooks and more, out of the box.
@@ -154,9 +156,123 @@ const updated = await Product.findOneAndUpdate(query, newDocument, {
 
 - [Mongoose](https://mongoosejs.com/).
 
+
+
 # CRUD (NodeJS - Express - Mongoose - Mongo)
 
+
+
+## Endpoints
+
+### GET products
+
+Gets all the products from the database. Those products can be filtered by category or name, using querystring.
+
+#### Example response
+
+```json
+
+[
+    {
+        "_id": "61dee9b4254f7f5e5cbaaaa8",
+        "name": "Manzana",
+        "price": 900000,
+        "category": "vegetable",
+        "__v": 0
+    },
+    {
+        "_id": "61deeb12db7f8a6906ded2cf",
+        "name": "Lechuga",
+        "price": 50,
+        "category": "vegetable",
+        "__v": 0
+    }
+]
+```
+
+### GET products/{id}
+Returns the detail of a specific product
+
+#### Example response
+```json
+{
+    "_id": "61dee9b4254f7f5e5cbaaaa8",
+    "name": "Manzana",
+    "price": 200,
+    "category": "fruit",
+    "__v": 0
+}
+```
+
+### POST /product
+
+#### Body
+```json
+{
+    "name": "Tomate",
+    "price": 900,
+    "category": "fruit"
+}
+```
+
+#### Example response
+```json
+{
+    "name": "Tomate",
+    "price": 900,
+    "category": "fruit",
+    "_id": "61df1d928f4eedad5f36dab4",
+    "__v": 0
+}
+```
+
+### PUT /products
+
+#### Body
+```json
+{
+    "_id": "61dee9b4254f7f5e5cbaaaa8",
+    "name": "Manzana",
+    "price": 900000,
+    "category": "vegetable"
+}
+```
+
+#### Example response
+```json
+{
+    "_id": "61dee9b4254f7f5e5cbaaaa8",
+    "name": "Manzana",
+    "price": 900000,
+    "category": "vegetable",
+    "__v": 0
+}
+```
+
+### DELETE /products
+
+#### Body
+```json
+{
+    "_id": "61deeb12db7f8a6906ded2d0"
+}
+```
+
+#### Example response
+```json
+{
+    "_id": "61deeb12db7f8a6906ded2d0",
+    "name": "Papa",
+    "price": 100,
+    "category": "vegetable",
+    "__v": 0
+}
+```
+
+
 # Middleware basics
+
+
 
 ![Middleware basics](assets/imgs/middleware01.png?raw=true "Middleware basics")
 
