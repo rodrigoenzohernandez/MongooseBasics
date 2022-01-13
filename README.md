@@ -2,6 +2,8 @@ node-express-mongo-training
 
 # Mongoose basics
 
+
+
 # CRUD (NodeJS - Express - Mongoose - Mongo)
 
 # Middleware basics
@@ -31,6 +33,11 @@ An Express application can use the following types of middleware:
 
 
 ![Middleware parts](assets/imgs/middleware02.png?raw=true "Middleware parts")
+
+## Documentation
+
+- [Using middleware](http://expressjs.com/en/guide/using-middleware.html#using-middleware).
+- [Writing middleware](http://expressjs.com/en/guide/writing-middleware.html#writing-middleware-for-use-in-express-apps).
 
 
 # Handling errors
