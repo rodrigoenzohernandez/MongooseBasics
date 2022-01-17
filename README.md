@@ -354,7 +354,7 @@ app.get("/error", (req, res) => {
 //Error Handler
 app.use((err, req, res, next) => {
   const { status = 500, message = 'Something sent wrong' } = err;
-  res.status(status).send('Error')
+  res.status(status).send(message)
 })
 
 ```
