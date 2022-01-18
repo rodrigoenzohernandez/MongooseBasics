@@ -404,6 +404,26 @@ const handleValidationErr = (err) => {
 
 - [Error handling](https://expressjs.com/en/guide/error-handling.html).
 
+# Body Validations with Joi
+
+joi lets you describe your data using a simple, intuitive, and readable language.
+
+Example:
+
+```js
+const productSchema = Joi.object({
+  name: Joi.string().required(),
+  price: Joi.number().required().min(0),
+  category: Joi.array(),
+}).required();
+
+const { error } = productSchema.validate(req.body);
+```
+
+## Documentation
+
+- [joi](https://joi.dev/api/?v=17.5.0).
+
 # Mongo data relationships
 
 # Cookies
