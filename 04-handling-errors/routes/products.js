@@ -3,11 +3,14 @@ var router = express.Router();
 
 const productController = require('../controllers/productController')
 
+const validateProduct = require('../middlewares/validateProduct')
+
+
 router.get('/', wrapAsync(productController.getProducts));
 
 router.get('/:id', wrapAsync(productController.getProductDetail));
 
-router.post('/', wrapAsync(productController.createProduct));
+router.post('/', validateProduct, wrapAsync(productController.createProduct));
 
 router.put('/', wrapAsync(productController.updateProduct));
 
