@@ -1,6 +1,7 @@
 const Product = require("./../models/product");
 
 const AppError = require("../utilities/AppError");
+const Joi = require("joi");
 
 const productController = {
   async getProducts(req, res) {
@@ -23,6 +24,19 @@ const productController = {
     }
   },
   async createProduct(req, res, next) {
+    const productSchema = Joi.object({
+      name: Joi.string().required(),
+      price: Joi.number().required().min(0),
+      category: Joi.string(),
+    }).required();
+
+    const { error } = productSchema.validate(req.body);
+
+    if (error) {
+      const msg = error.details[0].message;
+      throw new AppError(msg, 400);
+    }
+
     const p = new Product(req.body);
 
     p.save()
