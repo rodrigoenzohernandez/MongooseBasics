@@ -383,6 +383,23 @@ function wrapAsync(fn) {
 router.get("/:id", wrapAsync(productController.getProductDetail));
 ```
 
+## Mongo Custom Middleware Error Handler
+
+```js
+//Mongo validation error middleware
+app.use((err, req, res, next) => {
+  console.log(err.name);
+  if (err.name === "ValidationError") err = handleValidationErr(err);
+  //if(err.name ==='CastError') err = handleValidationErr(err) for example, another use.
+  next(err);
+});
+
+const handleValidationErr = (err) => {
+  console.log(err);
+  return new AppError(`Validation Failed...${err.message}`, 400);
+};
+```
+
 ## Documentation
 
 - [Error handling](https://expressjs.com/en/guide/error-handling.html).

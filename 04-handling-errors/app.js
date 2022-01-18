@@ -8,6 +8,8 @@ var productsRouter = require('./routes/products');
 
 var app = express();
 
+const AppError = require('./utilities/AppError')
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -32,6 +34,19 @@ async function main() {
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+//Mongo validation error middleware
+app.use((err, req, res, next) =>{
+  console.log(err.name);
+  if(err.name ==='ValidationError') err = handleValidationErr(err)
+  //if(err.name ==='CastError') err = handleValidationErr(err) for example, another use.
+  next(err)
+})
+
+const handleValidationErr = err => {
+  console.log(err);
+  return new AppError(`Validation Failed...${err.message}`, 400)
+}
 
 // error handler
 
