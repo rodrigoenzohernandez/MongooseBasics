@@ -420,6 +420,49 @@ const productSchema = Joi.object({
 const { error } = productSchema.validate(req.body);
 ```
 
+## Middleware to validate with Joi
+
+### BodySchemas
+
+```js
+const Joi = require("joi");
+
+const productSchema = Joi.object({
+  name: Joi.string().required(),
+  price: Joi.number().required().min(0),
+  category: Joi.string(),
+}).required();
+
+module.exports = productSchema;
+```
+
+### Middleware
+
+```js
+const AppError = require("../utilities/AppError");
+
+const productSchema = require("../bodySchemas/product");
+
+module.exports = (req, res, next) => {
+  const { error } = productSchema.validate(req.body);
+
+  if (error) {
+    const msg = error.details[0].message;
+    throw new AppError(msg, 400);
+  } else {
+    next();
+  }
+};
+```
+
+### Implementation
+
+```js
+const validateProduct = require('../middlewares/validateProduct')
+
+router.post('/', validateProduct, wrapAsync(productController.createProduct));
+```
+
 ## Documentation
 
 - [joi](https://joi.dev/api/?v=17.5.0).
