@@ -1,7 +1,5 @@
 node-express-mongo-training
 
-
-
 # Mongoose basics
 
 Mongoose provides a straight-forward, schema-based solution to model your application data. It includes built-in type casting, validation, query building, business logic hooks and more, out of the box.
@@ -156,11 +154,7 @@ const updated = await Product.findOneAndUpdate(query, newDocument, {
 
 - [Mongoose](https://mongoosejs.com/).
 
-
-
 # CRUD (NodeJS - Express - Mongoose - Mongo)
-
-
 
 ## Endpoints
 
@@ -171,108 +165,112 @@ Gets all the products from the database. Those products can be filtered by categ
 #### Example response
 
 ```json
-
 [
-    {
-        "_id": "61dee9b4254f7f5e5cbaaaa8",
-        "name": "Manzana",
-        "price": 900000,
-        "category": "vegetable",
-        "__v": 0
-    },
-    {
-        "_id": "61deeb12db7f8a6906ded2cf",
-        "name": "Lechuga",
-        "price": 50,
-        "category": "vegetable",
-        "__v": 0
-    }
+  {
+    "_id": "61dee9b4254f7f5e5cbaaaa8",
+    "name": "Manzana",
+    "price": 900000,
+    "category": "vegetable",
+    "__v": 0
+  },
+  {
+    "_id": "61deeb12db7f8a6906ded2cf",
+    "name": "Lechuga",
+    "price": 50,
+    "category": "vegetable",
+    "__v": 0
+  }
 ]
 ```
 
 ### GET products/{id}
+
 Returns the detail of a specific product
 
 #### Example response
+
 ```json
 {
-    "_id": "61dee9b4254f7f5e5cbaaaa8",
-    "name": "Manzana",
-    "price": 200,
-    "category": "fruit",
-    "__v": 0
+  "_id": "61dee9b4254f7f5e5cbaaaa8",
+  "name": "Manzana",
+  "price": 200,
+  "category": "fruit",
+  "__v": 0
 }
 ```
 
 ### POST /product
 
 #### Body
+
 ```json
 {
-    "name": "Tomate",
-    "price": 900,
-    "category": "fruit"
+  "name": "Tomate",
+  "price": 900,
+  "category": "fruit"
 }
 ```
 
 #### Example response
+
 ```json
 {
-    "name": "Tomate",
-    "price": 900,
-    "category": "fruit",
-    "_id": "61df1d928f4eedad5f36dab4",
-    "__v": 0
+  "name": "Tomate",
+  "price": 900,
+  "category": "fruit",
+  "_id": "61df1d928f4eedad5f36dab4",
+  "__v": 0
 }
 ```
 
 ### PUT /products
 
 #### Body
+
 ```json
 {
-    "_id": "61dee9b4254f7f5e5cbaaaa8",
-    "name": "Manzana",
-    "price": 900000,
-    "category": "vegetable"
+  "_id": "61dee9b4254f7f5e5cbaaaa8",
+  "name": "Manzana",
+  "price": 900000,
+  "category": "vegetable"
 }
 ```
 
 #### Example response
+
 ```json
 {
-    "_id": "61dee9b4254f7f5e5cbaaaa8",
-    "name": "Manzana",
-    "price": 900000,
-    "category": "vegetable",
-    "__v": 0
+  "_id": "61dee9b4254f7f5e5cbaaaa8",
+  "name": "Manzana",
+  "price": 900000,
+  "category": "vegetable",
+  "__v": 0
 }
 ```
 
 ### DELETE /products
 
 #### Body
+
 ```json
 {
-    "_id": "61deeb12db7f8a6906ded2d0"
+  "_id": "61deeb12db7f8a6906ded2d0"
 }
 ```
 
 #### Example response
+
 ```json
 {
-    "_id": "61deeb12db7f8a6906ded2d0",
-    "name": "Papa",
-    "price": 100,
-    "category": "vegetable",
-    "__v": 0
+  "_id": "61deeb12db7f8a6906ded2d0",
+  "name": "Papa",
+  "price": 100,
+  "category": "vegetable",
+  "__v": 0
 }
 ```
 
-
 # Middleware basics
-
-
 
 ![Middleware basics](assets/imgs/middleware01.png?raw=true "Middleware basics")
 
@@ -317,7 +315,7 @@ If you pass an error to next() and you do not handle it in a custom error handle
 ## How to throw an error
 
 ```js
-throw new Error('Password required')
+throw new Error("Password required");
 ```
 
 ## Writing error handlers
@@ -326,43 +324,68 @@ Define error-handling middleware functions in the same way as other middleware f
 
 ```js
 app.use(function (err, req, res, next) {
-  console.error(err.stack)
+  console.error(err.stack);
   //next(err) --> this will trigger the default error handler
-  res.status(500).send('Something broke!')
-})
+  res.status(500).send("Something broke!");
+});
 ```
+
 ## Custom Error Class
 
 ```js
-
 //Class
 class AppError extends Error {
-    constructor(message, status){
-        super();
-        this.message = message;
-        this.status = status;
-    }
+  constructor(message, status) {
+    super();
+    this.message = message;
+    this.status = status;
+  }
 }
 
 module.exports = AppError;
 //Implementation
 
 app.get("/error", (req, res) => {
-  throw new AppError('password required', 401)
+  throw new AppError("password required", 401);
 });
 
 //Error Handler
 app.use((err, req, res, next) => {
-  const { status = 500, message = 'Something sent wrong' } = err;
-  res.status(status).send(message)
-})
+  const { status = 500, message = "Something sent wrong" } = err;
+  res.status(status).send(message);
+});
+```
 
+## Async Utility
+
+We create a function, for example wrapAsync.
+
+We pass as argument all the code that normally would be at the try.
+
+This function will return a function and that function is gonna call the function that we passed as an argument.
+
+```js
+//Function
+
+/**
+ * This function receives an async function and executes it.
+ * @param {function} fn Async function
+ * @returns
+ */
+function wrapAsync(fn) {
+  return function (req, res, next) {
+    fn(req, res, next).catch((e) => next(e));
+  };
+}
+
+//Implementation
+
+router.get("/:id", wrapAsync(productController.getProductDetail));
 ```
 
 ## Documentation
 
 - [Error handling](https://expressjs.com/en/guide/error-handling.html).
-
 
 # Mongo data relationships
 
