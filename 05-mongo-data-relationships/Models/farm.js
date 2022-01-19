@@ -42,4 +42,8 @@ const makeFarm = async () => {
   console.log(farm);
 };
 
-makeFarm();
+//makeFarm();
+
+Farm.findOne({ name: 'Don Mario' })
+    .populate('products')
+    .then (farm => console. log(farm))
