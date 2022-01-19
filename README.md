@@ -522,9 +522,11 @@ const userSchema = new mongoose.Schema({
 ## One to many
 
 Store your data separately, but then store references to document ID's somewhere inside the parent.
+The parent has a reference to the child.
+The reference is on the parent.
 
 ```js
-//FarmSchema
+//FarmSchema (Parent)
 
 const farmSchema = new Schema({
   name: String,
@@ -532,7 +534,7 @@ const farmSchema = new Schema({
   products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
 });
 
-//ProductSchema
+//ProductSchema (Child)
 
 const productSchema = new Schema({
   name: String,
@@ -561,7 +563,7 @@ const makeFarm = async () => {
 ```
 
 ```json
-//Farms:
+//Farms (Parent):
 
 {
         "_id" : ObjectId("61e85ee3d4519739ec10f810"),
@@ -573,7 +575,7 @@ const makeFarm = async () => {
         "__v" : 0
 }
 
-//Products:
+//Products (Child):
 
 {
         "_id" : ObjectId("61e85c45a20a5d29b95f8ae0"),
@@ -590,8 +592,6 @@ The ref option is what tells Mongoose which model to use during population.
 
 ### How to populate a field?
 
-
-
 ```js
 Farm.findOne({ name: 'Don Mario' })
     .populate('products')
@@ -599,6 +599,18 @@ Farm.findOne({ name: 'Don Mario' })
 ```
 
 Without populate (We see only the IDs to the referenced documents)
+
+Populate specific field
+
+```js
+const findTweet = async () =>{
+    const t = await Tweet.find({})
+    .populate('user', 'userName')
+    .then (user => console. log(user))
+
+}
+```
+
 ```js
 {
   _id: new ObjectId("61e85ee3d4519739ec10f810"),
@@ -628,18 +640,44 @@ With populate (We see all the referenced documents)
 }
 ```
 
-
-
 ## One to "Bajillions"
 
-## Mongo Schema Design
+With thousands or more documents, it's more efficient to store a reference to the parent on the child document.
+The reference is on the child.
+
+Parent
+```js
+const userSchema = new Schema({
+  userName: String,
+  age: Number,
+});
+```
+
+Child
+```js
+const tweetSchema = new Schema({
+  text: String,
+  likes: Number,
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+});
+```
 
 ## Documentation
 
-- [6 Rules of Thumb for MongoDB Schema](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-3).
+- [6 Rules of Thumb for MongoDB Schema: Part 1](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-1).
+- [6 Rules of Thumb for MongoDB Schema: Part 2](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-2).
+
+- [6 Rules of Thumb for MongoDB Schema: Part 3](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-3).
 
 # Cookies
 
 # Session and flash
 
 # Authentication
+
+
+```js
+```
