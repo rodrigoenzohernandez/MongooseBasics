@@ -420,9 +420,9 @@ const productSchema = Joi.object({
 const { error } = productSchema.validate(req.body);
 ```
 
-## Middleware to validate with Joi
+# Middleware to validate with Joi
 
-### BodySchemas
+## BodySchemas
 
 ```js
 const Joi = require("joi");
@@ -436,7 +436,7 @@ const productSchema = Joi.object({
 module.exports = productSchema;
 ```
 
-### Middleware
+## Middleware
 
 ```js
 const AppError = require("../utilities/AppError");
@@ -455,12 +455,12 @@ module.exports = (req, res, next) => {
 };
 ```
 
-### Implementation
+## Implementation
 
 ```js
-const validateProduct = require('../middlewares/validateProduct')
+const validateProduct = require("../middlewares/validateProduct");
 
-router.post('/', validateProduct, wrapAsync(productController.createProduct));
+router.post("/", validateProduct, wrapAsync(productController.createProduct));
 ```
 
 ## Documentation
@@ -468,6 +468,80 @@ router.post('/', validateProduct, wrapAsync(productController.createProduct));
 - [joi](https://joi.dev/api/?v=17.5.0).
 
 # Mongo data relationships
+
+## One to few
+
+Embed the data directly in the document.
+
+### Schema
+
+```js
+const userSchema = new mongoose.Schema({
+  first: String,
+  last: String,
+  addresses: [
+    {
+      _id: { id: false }, //This prevents of autocreated ID
+      street: String,
+      city: String,
+      state: String,
+      country: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
+});
+```
+### Document
+
+```json
+{
+        "_id" : ObjectId("61e8354c5d70c61a5000a322"),
+        "first" : "Harry",
+        "last" : "Potter",
+        "addresses" : [
+                {
+                        "street" : "Quiroga",
+                        "city" : "Lomas",
+                        "state" : "Buenos Aires",
+                        "country" : "Argentina"
+                },
+                {
+                        "street" : "Alsina",
+                        "city" : "Temperley",
+                        "state" : "Buenos Aires",
+                        "country" : "Argentina"
+                }
+        ],
+        "__v" : 1
+}
+```
+
+## One to many
+
+Store your data separately, but then store references to document ID's somewhere inside the parent.
+
+```js
+{
+    farmName: ' Full Belly Farms',
+    location: 'Guinda, CA',
+    produce : [
+          ObjectID('2819781267781'),
+          ObjectID('1828678675667'),
+          ObjectID('8187777231283'),
+}
+```
+
+## Mongoose Populate
+
+## One to "Bajillions"
+
+## Mongo Schema Design
+
+## Documentation
+
+- [6 Rules of Thumb for MongoDB Schema](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-3).
 
 # Cookies
 
