@@ -493,6 +493,7 @@ const userSchema = new mongoose.Schema({
   ],
 });
 ```
+
 ### Document
 
 ```json
@@ -523,15 +524,67 @@ const userSchema = new mongoose.Schema({
 Store your data separately, but then store references to document ID's somewhere inside the parent.
 
 ```js
+//FarmSchema
+
+const farmSchema = new Schema({
+  name: String,
+  city: String,
+  products: [{ type: Schema.Types.ObjectId, ref: "Product" }],
+});
+
+//ProductSchema
+
+const productSchema = new Schema({
+  name: String,
+  price: Number,
+  season: {
+    type: String,
+    enum: ["Spring", "Summer", "Fall", "Winter"],
+  },
+});
+
+//Create Farm and add a product
+
+const makeFarm = async () => {
+  const farm = new Farm({
+    name: "Don Mario",
+    city: "Burzaco",
+  });
+  const Sandia = await Product.findOne({ name: "Sandia" });
+
+  farm.products.push(Sandia);
+
+  await farm.save();
+
+  console.log(farm);
+};
+```
+
+```json
+//Farms:
+
 {
-    farmName: ' Full Belly Farms',
-    location: 'Guinda, CA',
-    produce : [
-          ObjectID('2819781267781'),
-          ObjectID('1828678675667'),
-          ObjectID('8187777231283'),
+        "_id" : ObjectId("61e85ee3d4519739ec10f810"),
+        "name" : "Don Mario",
+        "city" : "Burzaco",
+        "products" : [
+                ObjectId("61e85c45a20a5d29b95f8ae0") //Refers to the product with this ID
+        ],
+        "__v" : 0
+}
+
+//Products:
+
+{
+        "_id" : ObjectId("61e85c45a20a5d29b95f8ae0"),
+        "name" : "Sandia",
+        "price" : 20,
+        "season" : "Summer",
+        "__v" : 0
 }
 ```
+
+The ref option is what tells Mongoose which model to use during population.
 
 ## Mongoose Populate
 
