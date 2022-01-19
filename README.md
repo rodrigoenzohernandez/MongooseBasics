@@ -588,6 +588,48 @@ The ref option is what tells Mongoose which model to use during population.
 
 ## Mongoose Populate
 
+### How to populate a field?
+
+
+
+```js
+Farm.findOne({ name: 'Don Mario' })
+    .populate('products')
+    .then (farm => console. log(farm))
+```
+
+Without populate (We see only the IDs to the referenced documents)
+```js
+{
+  _id: new ObjectId("61e85ee3d4519739ec10f810"),
+  name: 'Don Mario',
+  city: 'Burzaco',
+  products: [ new ObjectId("61e85c45a20a5d29b95f8ae0") ],
+  __v: 0
+}
+```
+
+With populate (We see all the referenced documents)
+```js
+{
+  _id: new ObjectId("61e85ee3d4519739ec10f810"),
+  name: 'Don Mario',
+  city: 'Burzaco',
+  products: [
+    {
+      _id: new ObjectId("61e85c45a20a5d29b95f8ae0"),
+      name: 'Sandia',
+      price: 20,
+      season: 'Summer',
+      __v: 0
+    }
+  ],
+  __v: 0
+}
+```
+
+
+
 ## One to "Bajillions"
 
 ## Mongo Schema Design
