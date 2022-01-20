@@ -6,6 +6,8 @@ router.get('/', farmController.getFarms)
 
 router.get('/:id', farmController.getFarmDetail)
 
+router.get('/:id/products', farmController.addProductToFarm)
+
 router.post('/', farmController.createFarm)
 
 
