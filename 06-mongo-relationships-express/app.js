@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var productsRouter = require('./routes/products');
+let farmsRouter = require('./routes/farm')
 
 
 var app = express();
@@ -17,6 +18,7 @@ app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/products', productsRouter);
+app.use('/farms', farmsRouter)
 
 //mongo connection
 
