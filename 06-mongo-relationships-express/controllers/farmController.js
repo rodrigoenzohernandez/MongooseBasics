@@ -26,7 +26,14 @@ const farmController = {
       await farm.save();
       await product.save();
       res.send(farm)
-}
+  },
+  async deleteFarm(req, res){
+    const farm = await Farm.findByIdAndDelete(req.params.id);
+
+    res.send(farm)
+
+  }
+  
 };
 
 module.exports = farmController;
