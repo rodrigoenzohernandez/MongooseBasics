@@ -13,7 +13,6 @@ app.use(session(sessionOptions));
 
 app.get("/viewcount", (req, res) => {
   req.session.count ? (req.session.count += 1) : (req.session.count = 1);
-
   res.send(`You have visited this page ${req.session.count} times`);
 });
 
