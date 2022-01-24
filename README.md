@@ -668,11 +668,51 @@ const tweetSchema = new Schema({
 ## Documentation
 
 - [6 Rules of Thumb for MongoDB Schema: Part 1](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-1).
+
 - [6 Rules of Thumb for MongoDB Schema: Part 2](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-2).
 
 - [6 Rules of Thumb for MongoDB Schema: Part 3](https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-3).
 
 # Cookies
+
+Cookies are little bits of information that are stored in a user's browser when browsing a particular website.
+Once a cookie is set, a user's browser will send the cookie on every subsequent request to the site.
+Cookies allow use to make HTTP stateful.
+
+## Send cookie
+
+```js
+    res.cookie('name', 'Rodrigo')
+```
+
+## Request cookie
+
+```js
+    const { name } = req.cookies
+    res.send(`Hi ${name}`)
+```
+
+## Sign cookie
+
+Allows to validate the data integrity.
+
+We cannot change the cookie mannualy from dev tools.
+
+If I change the secret, all the saved cookies will be invalid.
+
+```js
+app.use(cookieParser('this-is-my-secret')) //The secret should be in a env variable
+
+//set a signed cookie
+res.cookie('name', 'Rodrigo', {signed: true})
+
+//read a signed cookie
+console.log(req.signedCookies.name)
+```
+## Documentation
+
+- [Cookie parser](https://www.npmjs.com/package/cookie-parser).
+
 
 # Session and flash
 
