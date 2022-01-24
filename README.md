@@ -716,6 +716,31 @@ console.log(req.signedCookies.name)
 
 # Session and flash
 
+It's not very practical (or secure) to store a lot of data client-side using cookies. This is where sessions come in!
+Sessions are a server-side data store that we use to make HTTP stateful. Instead of storing data using cookies, we store the data on the server-side and then send the browser a cookie that can be used to retrieve the data.
+A diagram might be helpful here.
+
+The client saves as a cookie an id for each client.
+
+Important: as default, the information would be saved in memory, but is not for production. In production can be used Redis for example. Here everytime we restart the server, the data is deleted, but if you use redis that does not happen.
+
+## Cookies vs session
+
+- Cookies are limited, in quantity of cookies that a domain can have and in the size of each cookie
+- Cookies client side
+- Session server side
+
+## Example
+
+```js
+  req.session.count ? (req.session.count += 1) : (req.session.count = 1);
+  res.send(`You have visited this page ${req.session.count} times`);
+```
+## Flash
+
+- [Cookie parser](https://github.com/jaredhanson/connect-flash).
+
+
 # Authentication
 
 
