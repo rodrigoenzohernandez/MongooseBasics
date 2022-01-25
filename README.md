@@ -743,6 +743,61 @@ Important: as default, the information would be saved in memory, but is not for 
 
 # Authentication
 
+## Authentication VS Authorization
+
+### Authentication
+
+Authentication is the process of verifying who a particular user is.
+We typically authenticate with a username/password combo, but we can also use security questions, facial recognition, etc.
+
+### Authorization
+
+Authorization is verifying what a specific user has access to.
+Generally, we authorize after a user has been authenticated. "Now that we know who you are, here is what you are allowed to do and NOT allowed to do"
+
+## Hashing
+
+Rather than storing a password in the database, we run the password through a hashing function first and
+then store the result in the database.
+
+### Hasing functions
+
+Hashing functions are functions that map input data of some arbitrary size to fixed-size output values.
+
+![Hashing](assets/imgs/hashing.png?raw=true "Hashing")
+
+Example:
+
+![Example](assets/imgs/server-db.png?raw=true "Hashing")
+
+
+### CRYPTOGRAPHIC HASH FUNCTIONS
+
+1. One-way function which is infeasible to invert
+2. Small change in input yields large change in the output
+3. Deterministic - same input yields same output
+4. Unlikely to find 2 outputs with same value
+5. Password Hash Functions are deliberately SLOW
+
+### Password salts
+
+A salt is a random value added to the password before we hash it.
+
+It helps ensure unique hashes and mitigate common attacks
+
+### Bcrypt
+
+![Example](assets/imgs/bcrypt-example.png?raw=true "Bcrypt")
+
+
+```js
+```
+
+```js
+```
+
+```js
+```
 
 ```js
 ```
