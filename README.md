@@ -593,9 +593,9 @@ The ref option is what tells Mongoose which model to use during population.
 ### How to populate a field?
 
 ```js
-Farm.findOne({ name: 'Don Mario' })
-    .populate('products')
-    .then (farm => console. log(farm))
+Farm.findOne({ name: "Don Mario" })
+  .populate("products")
+  .then((farm) => console.log(farm));
 ```
 
 Without populate (We see only the IDs to the referenced documents)
@@ -603,12 +603,11 @@ Without populate (We see only the IDs to the referenced documents)
 Populate specific field
 
 ```js
-const findTweet = async () =>{
-    const t = await Tweet.find({})
-    .populate('user', 'userName')
-    .then (user => console. log(user))
-
-}
+const findTweet = async () => {
+  const t = await Tweet.find({})
+    .populate("user", "userName")
+    .then((user) => console.log(user));
+};
 ```
 
 ```js
@@ -622,6 +621,7 @@ const findTweet = async () =>{
 ```
 
 With populate (We see all the referenced documents)
+
 ```js
 {
   _id: new ObjectId("61e85ee3d4519739ec10f810"),
@@ -646,6 +646,7 @@ With thousands or more documents, it's more efficient to store a reference to th
 The reference is on the child.
 
 Parent
+
 ```js
 const userSchema = new Schema({
   userName: String,
@@ -654,6 +655,7 @@ const userSchema = new Schema({
 ```
 
 Child
+
 ```js
 const tweetSchema = new Schema({
   text: String,
@@ -682,14 +684,14 @@ Cookies allow use to make HTTP stateful.
 ## Send cookie
 
 ```js
-    res.cookie('name', 'Rodrigo')
+res.cookie("name", "Rodrigo");
 ```
 
 ## Request cookie
 
 ```js
-    const { name } = req.cookies
-    res.send(`Hi ${name}`)
+const { name } = req.cookies;
+res.send(`Hi ${name}`);
 ```
 
 ## Sign cookie
@@ -701,18 +703,18 @@ We cannot change the cookie mannualy from dev tools.
 If I change the secret, all the saved cookies will be invalid.
 
 ```js
-app.use(cookieParser('this-is-my-secret')) //The secret should be in a env variable
+app.use(cookieParser("this-is-my-secret")); //The secret should be in a env variable
 
 //set a signed cookie
-res.cookie('name', 'Rodrigo', {signed: true})
+res.cookie("name", "Rodrigo", { signed: true });
 
 //read a signed cookie
-console.log(req.signedCookies.name)
+console.log(req.signedCookies.name);
 ```
+
 ## Documentation
 
 - [Cookie parser](https://www.npmjs.com/package/cookie-parser).
-
 
 # Session and flash
 
@@ -733,13 +735,13 @@ Important: as default, the information would be saved in memory, but is not for 
 ## Example
 
 ```js
-  req.session.count ? (req.session.count += 1) : (req.session.count = 1);
-  res.send(`You have visited this page ${req.session.count} times`);
+req.session.count ? (req.session.count += 1) : (req.session.count = 1);
+res.send(`You have visited this page ${req.session.count} times`);
 ```
+
 ## Flash
 
 - [Cookie parser](https://github.com/jaredhanson/connect-flash).
-
 
 # Authentication
 
@@ -770,7 +772,6 @@ Example:
 
 ![Example](assets/imgs/server-db.png?raw=true "Hashing")
 
-
 ### CRYPTOGRAPHIC HASH FUNCTIONS
 
 1. One-way function which is infeasible to invert
@@ -783,21 +784,28 @@ Example:
 
 A salt is a random value added to the password before we hash it.
 
-It helps ensure unique hashes and mitigate common attacks
+It helps ensure unique hashes and mitigate common attacks. One of this common attacks could be a reverse lookup table, in which the hacker runs the hashing function with a list of common passwords and then verifies if the output matches with the hacked database data.
+
+It consist on adding a few characters to the input before encripting it.
 
 ### Bcrypt
 
 ![Example](assets/imgs/bcrypt-example.png?raw=true "Bcrypt")
 
+- [Bcrypt](https://github.com/kelektiv/node.bcrypt.js).
 
 ```js
+
 ```
 
 ```js
+
 ```
 
 ```js
+
 ```
 
 ```js
+
 ```
