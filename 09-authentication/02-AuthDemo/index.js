@@ -4,6 +4,14 @@ const User = require("./models/user");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 
+const session = require("express-session");
+
+const sessionOptions = {
+  secret: "my-secret",
+  resave: false,
+  saveUninitialized: false,
+};
+
 //mongo connection
 
 const mongoose = require("mongoose");
@@ -17,6 +25,8 @@ async function main() {
 }
 
 app.use(bodyParser.json());
+
+app.use(session(sessionOptions));
 
 app.get("/secret", (req, res) => {
   res.send("This is secret");
@@ -44,9 +54,11 @@ app.post("/login", async (req, res) => {
     logged = await bcrypt.compare(password, user.password);
   }
 
-  logged
-    ? res.send("Welcome")
-    : res.status(401).send("User or password incorrect");
+  if (logged) {
+    req.session.logged = true;
+    return res.send("Welcome");
+  }
+  res.status(401).send("User or password incorrect");
 });
 
 app.listen(3000, () => {
