@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const User = require("./models/user");
 const bodyParser = require("body-parser");
+const bcrypt = require('bcrypt')
+
 
 //mongo connection
 
@@ -27,7 +29,7 @@ app.post("/user", async (req, res) => {
 
   const newUser = await User.create({
     username: req.body.username,
-    password: req.body.password,
+    password: await bcrypt.hash(req.body.password, 12),
   });
 
   newUser.save();
