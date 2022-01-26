@@ -732,6 +732,21 @@ Important: as default, the information would be saved in memory, but is not for 
 - Cookies client side
 - Session server side
 
+## Basic setup
+
+```js
+const session = require("express-session");
+
+const sessionOptions = {
+  secret: "my-secret",
+  resave: false,
+  saveUninitialized: false,
+};
+
+app.use(session(sessionOptions));
+
+```
+
 ## Example
 
 ```js
@@ -794,11 +809,16 @@ It consist on adding a few characters to the input before encripting it.
 
 - [Bcrypt](https://github.com/kelektiv/node.bcrypt.js).
 
+#### Hash
 ```js
+const bcrypt = require('bcrypt')
+const hash = await bcrypt.hash(pw, 12)
 
 ```
-
+#### Compare
 ```js
+const bcrypt = require('bcrypt')
+const result = await bcrypt.compare(pw, hashedPw)
 
 ```
 
