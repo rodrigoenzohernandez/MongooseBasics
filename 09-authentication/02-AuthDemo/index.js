@@ -2,8 +2,7 @@ const express = require("express");
 const app = express();
 const User = require("./models/user");
 const bodyParser = require("body-parser");
-const bcrypt = require('bcrypt')
-
+const bcrypt = require("bcrypt");
 
 //mongo connection
 
@@ -24,9 +23,6 @@ app.get("/secret", (req, res) => {
 });
 
 app.post("/user", async (req, res) => {
-  console.log(req.body.username);
-  console.log(req.body.password);
-
   const newUser = await User.create({
     username: req.body.username,
     password: await bcrypt.hash(req.body.password, 12),
@@ -35,6 +31,22 @@ app.post("/user", async (req, res) => {
   newUser.save();
 
   res.send(newUser);
+});
+
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  const user = await User.findOne({ username: username });
+
+  let logged = false;
+
+  if (user) {
+    logged = await bcrypt.compare(password, user.password);
+  }
+
+  logged
+    ? res.send("Welcome")
+    : res.status(401).send("User or password incorrect");
 });
 
 app.listen(3000, () => {
