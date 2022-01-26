@@ -6,7 +6,7 @@ const bcrypt = require("bcrypt");
 
 const session = require("express-session");
 
-const isLogged = require('./middlewares/isLogged')
+const isLogged = require("./middlewares/isLogged");
 
 const sessionOptions = {
   secret: "my-secret",
@@ -61,6 +61,12 @@ app.post("/login", async (req, res) => {
     return res.send("Welcome");
   }
   res.status(401).send("User or password incorrect");
+});
+
+app.post("/logout", async (req, res) => {
+  req.session.user_id = null;
+  //req.session.destroy() //Destroys all the session
+  res.send("Logged out successfully");
 });
 
 app.listen(3000, () => {
