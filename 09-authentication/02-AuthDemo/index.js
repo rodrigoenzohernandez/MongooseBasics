@@ -48,16 +48,10 @@ app.post("/user", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  const user = await User.findOne({ username: username });
+    const foundUser = await User.findAndValidate(username, password)
 
-  let logged = false;
-
-  if (user) {
-    logged = await bcrypt.compare(password, user.password);
-  }
-
-  if (logged) {
-    req.session.user_id = user._id;
+  if (foundUser) {
+    req.session.user_id = foundUser._id;
     return res.send("Welcome");
   }
   res.status(401).send("User or password incorrect");
