@@ -37,7 +37,8 @@ app.get("/secret", isLogged, (req, res) => {
 app.post("/user", async (req, res) => {
   const newUser = await User.create({
     username: req.body.username,
-    password: await bcrypt.hash(req.body.password, 12),
+    password: req.body.password
+    // password: await bcrypt.hash(req.body.password, 12),
   });
 
   newUser.save();
