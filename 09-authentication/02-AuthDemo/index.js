@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 
 const session = require("express-session");
 
+const isLogged = require('./middlewares/isLogged')
+
 const sessionOptions = {
   secret: "my-secret",
   resave: false,
@@ -28,7 +30,7 @@ app.use(bodyParser.json());
 
 app.use(session(sessionOptions));
 
-app.get("/secret", (req, res) => {
+app.get("/secret", isLogged, (req, res) => {
   res.send("This is secret");
 });
 
@@ -55,7 +57,7 @@ app.post("/login", async (req, res) => {
   }
 
   if (logged) {
-    req.session.logged = true;
+    req.session.user_id = user._id;
     return res.send("Welcome");
   }
   res.status(401).send("User or password incorrect");
