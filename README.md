@@ -910,6 +910,70 @@ module.exports = isLogged;
 - [Passport local mongoose](https://github.com/saintedlama/passport-local-mongoose).
 - [Passport local](https://github.com/jaredhanson/passport-local).
 
-```js
+# Basic Seurity Issues
 
+## Mongo
+
+### Example
+
+```js
+db.users.find({ username: req.body.username });
+
+//Instead of sending a user in the body, the hacker could send this:
+
+db.users.find({ username: { $gt: "" } });
+
+//This will return all the users, because all users are gt than "". This is a potential risk, because an endpoint that was ment to find just one user, now returns all users.
 ```
+
+### Solution
+
+The solution would be not allow characters that allow to create a query, for example $, or {}
+
+- [Express mongo sanitize](https://www.npmjs.com/package/express-mongo-sanitize)
+
+This applies to the queryString and params.
+
+```js
+const mongoSanitize = require("express-mongo-sanitize");
+
+const app = express();
+
+app.use(mongoSanitize());
+```
+
+## Secure cookies and session
+
+```js
+const sessionConfig = {
+  secret: "secret",
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true, //This allows that a script cannot access to cookies data
+    secure: true, //This allows that the cookies only work if there is https
+  },
+};
+```
+
+## Helmet
+
+Helmet helps you secure your Express apps by setting various HTTP headers. It's not a silver bullet, but it can help!
+
+```js
+const helmet = require("helmet");
+
+app.use(helmet());
+```
+
+If we want to turn off a middleware, we can do this:
+
+```js
+app.use(
+  helmet({
+    referrerPolicy: { policy: "no-referrer" },
+  })
+);
+```
+
+- [Helmet](https://helmetjs.github.io/)
