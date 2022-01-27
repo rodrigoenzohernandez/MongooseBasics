@@ -1,5 +1,5 @@
 const isLogged = (req, res, next) => {
-  if (!req.session.user_id) {
+  if (!req.isAuthenticated()) {
     return res.status(401).send("Unauthorized");
   }
   next();
