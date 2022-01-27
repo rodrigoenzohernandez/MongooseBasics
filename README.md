@@ -822,6 +822,16 @@ const result = await bcrypt.compare(pw, hashedPw)
 
 ```
 
+## Passport
+
+
+### Documentation
+
+- [Passport](http://www.passportjs.org/).
+- [Passport local mongoose](https://github.com/saintedlama/passport-local-mongoose).
+- [Passport local](https://github.com/jaredhanson/passport-local).
+
+
 ```js
 
 ```
