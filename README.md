@@ -744,7 +744,6 @@ const sessionOptions = {
 };
 
 app.use(session(sessionOptions));
-
 ```
 
 ## Example
@@ -810,31 +809,106 @@ It consist on adding a few characters to the input before encripting it.
 - [Bcrypt](https://github.com/kelektiv/node.bcrypt.js).
 
 #### Hash
-```js
-const bcrypt = require('bcrypt')
-const hash = await bcrypt.hash(pw, 12)
 
+```js
+const bcrypt = require("bcrypt");
+const hash = await bcrypt.hash(pw, 12);
 ```
-#### Compare
-```js
-const bcrypt = require('bcrypt')
-const result = await bcrypt.compare(pw, hashedPw)
 
+#### Compare
+
+```js
+const bcrypt = require("bcrypt");
+const result = await bcrypt.compare(pw, hashedPw);
 ```
 
 ## Passport
 
+### Model example
+
+```js
+const mongoose = require("mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
+const Schema = mongoose.Schema;
+
+const userSchema = new Schema({
+  email: {
+    type: String,
+    required: [true, "Email cannot be blank"],
+    unique: true,
+  },
+});
+
+userSchema.plugin(passportLocalMongoose);
+
+/**
+ * Passport-Local Mongoose will add a username, hash and salt field to store the username, the hashed password and the salt value.
+ * Additionally Passport-Local Mongoose adds some methods to your Schema.
+ */
+
+module.exports = mongoose.model("User", userSchema);
+```
+
+### Implementation example
+
+```js
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+
+app.use(session(sessionOptions)); //MUST BE BEFORE THE NEXT 3 LINES
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser()); //It means how it will be stored in the session
+passport.deserializeUser(User.deserializeUser());
+```
+
+### Register the user
+
+```js
+app.post("/user", async (req, res) => {
+  const user = new User({
+    email: req.body.email,
+    username: req.body.username,
+  });
+
+  const newUser = await User.register(user, req.body.password);
+
+  //log in the user
+  req.login(newUser, (err) => {
+    if (err) return next(err);
+    res.send(newUser);
+  });
+});
+```
+
+### Login
+
+```js
+app.post("/login", passport.authenticate("local"), async (req, res) => {
+  res.send("Logged");
+});
+```
+
+### Auhenticated middleware
+
+```js
+const isLogged = (req, res, next) => {
+  if (!req.isAuthenticated()) {
+    return res.status(401).send("Unauthorized");
+  }
+  next();
+};
+
+module.exports = isLogged;
+```
 
 ### Documentation
 
 - [Passport](http://www.passportjs.org/).
 - [Passport local mongoose](https://github.com/saintedlama/passport-local-mongoose).
 - [Passport local](https://github.com/jaredhanson/passport-local).
-
-
-```js
-
-```
 
 ```js
 
