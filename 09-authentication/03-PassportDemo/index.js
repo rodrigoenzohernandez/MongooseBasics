@@ -22,7 +22,7 @@ const user = require("./models/user");
 main().catch((err) => console.log(err));
 
 async function main() {
-  await mongoose.connect("mongodb://localhost:27017/authDemo");
+  await mongoose.connect("mongodb://localhost:27017/passportDemo");
   console.log("Connection open!");
 }
 
