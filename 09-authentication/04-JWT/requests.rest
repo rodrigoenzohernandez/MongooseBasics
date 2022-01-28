@@ -1,0 +1,30 @@
+@baseUrl = http://localhost:
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiUm9kcmlnbyIsImlhdCI6MTY0MzM4Njc4NSwiZXhwIjoxNjQzMzg2ODAwfQ.c655igJrAfTqLOevAQm7Rex4RjMehrktgSzfso78mEM
+
+GET {{baseUrl}}3000/posts
+Authorization: Bearer {{token}}
+
+### 
+
+POST {{baseUrl}}4000/token
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiUm9kcmlnbyIsImlhdCI6MTY0MzM5MzY4MX0._kYF2gG3j2_Vg22rJYZhAqeNuaiWeaAGK5-Mwyz2Uzk"
+}
+###
+
+DELETE {{baseUrl}}4000/logout
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiUm9kcmlnbyIsImlhdCI6MTY0MzM5MzY4MX0._kYF2gG3j2_Vg22rJYZhAqeNuaiWeaAGK5-Mwyz2Uzk"
+}
+
+###
+POST {{baseUrl}}4000/login
+Content-Type: application/json
+
+{
+    "username": "Rodrigo"
+}
