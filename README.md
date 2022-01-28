@@ -977,3 +977,73 @@ app.use(
 ```
 
 - [Helmet](https://helmetjs.github.io/)
+
+# JWT
+
+## Explanation
+
+## Implementation
+
+JWT works in cross multiple servers. You can get a token in one server and then validate it in another server.
+
+### How to get a secure secret
+
+```js
+require("crypto").randomBytes(64).toString("hex");
+```
+
+### Get token
+
+```js
+//After user and password validation
+
+const username = req.body.username;
+
+const user = {
+  name: username,
+};
+
+const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+res.json({ accessToken: accessToken });
+```
+
+### Validate token (Using a middleware)
+
+```js
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1]; //If there is an auth header return the token
+  if (!token) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+}
+```
+
+### Refresh Token
+
+```js
+let refreshTokens = [];
+
+app.post("/token", (req, res) => {
+  console.log("object");
+  const refreshToken = req.body.token;
+  if (refreshToken == null) return res.sendStatus(401);
+  if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
+
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    const accessToken = generateAccessToken({ name: user.name });
+    res.json({ accessToken: accessToken });
+  });
+});
+
+function generateAccessToken(user) {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15s" });
+}
+```
+
+- [Example](https://www.youtube.com/watch?v=mbsmsi7l3r4)
