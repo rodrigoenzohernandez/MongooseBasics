@@ -1047,3 +1047,88 @@ function generateAccessToken(user) {
 ```
 
 - [Example](https://www.youtube.com/watch?v=mbsmsi7l3r4)
+
+# Testing with Mocha
+
+## ASSERTION
+
+An assertion is a comparison which throws an exception upon failure
+
+```js
+const assert = value => {
+ if (!value) {
+    throw new Error('assertion failure!');
+};
+```
+
+## UNIT TEST
+
+A unit test asserts a unit behaves as intented.
+A unit is tipically a single function.
+
+## INTEGRATION TEST
+
+An integration tests asserts an aggregate of units or modules behave as intended
+
+## Installation
+
+```bash
+cd /path/to/my/project
+npm instal1 -D mocha
+```
+
+## Important
+
+Mocha uses GLOBALS
+
+## Suite
+
+Organizes the tests
+
+describe(title, callback) creates a Suite.
+
+```js
+describe("requestTime middleware", function () {
+  // Tests go here
+});
+```
+
+## Middleware test example
+
+```js
+const assert = require("assert");
+const requestTime = require("../middlewares/request-time");
+
+describe("requestTime middleware", function () {
+  // Tests go here
+  it("Should add a `requestTime` property to the `req` object", function () {
+    const req = {};
+    // call function
+    requestTime(req, null, () => {});
+    // make assertion
+    assert.ok(req.requestTime);
+  });
+});
+```
+
+## Route test example - with supertest
+
+```js
+const assert = require("assert");
+const app = require("../app");
+const request = require("supertest");
+describe("GET /unix-timestamp", function () {
+  it("should respond with JSON object containing timestamp", function (done) {
+    request(app)
+      .get("/unix-timestamp")
+      .expect(200)
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+        assert.ok(res.body.timestamp);
+        done();
+      });
+  });
+});
+```
