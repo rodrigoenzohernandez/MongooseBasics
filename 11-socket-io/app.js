@@ -1,42 +1,68 @@
 require("dotenv").config();
 
 const express = require("express");
-const app = express();
-const mongoose = require(`mongoose`);
 const bodyParser = require("body-parser");
+const app = express();
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
+const mongoose = require(`mongoose`);
+
+app.use(express.static(`${__dirname}/public`));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
 
 const dbUrl = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`;
 
-const server = app.listen(3000, () => {
-  console.log(`server is running on port, ${server.address().port} `);
-});
 
-app.use(express.static(`${__dirname}/public/html`));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
-async function main() {
+
+
+
+async function mongooseConnect() {
   await mongoose.connect(dbUrl);
   console.log("Connection open!");
 }
 
-main().catch((err) => console.log(err));
 
 const Message = mongoose.model("Message", { name: String, message: String });
 
 app.get("/messages", (req, res) => {
-  Message.find({}, (err, messages) => {
-    res.send(messages);
-  });
+
+  try {
+    Message.find({}, (err, messages) => {
+      res.send(messages);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+
+});
+app.post("/messages", (req, res) => {
+
+  try {
+    var message = new Message(req.body);
+    message.save((err) => {
+      if (err) sendStatus(500);
+      io.emit("message", req.body);
+      res.sendStatus(200);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+
+
 });
 
-app.post('/messages', (req, res) => {
-  var message = new Message(req.body);
-  message.save((err) =>{
-    if(err)
-      sendStatus(500);
-    res.sendStatus(200);
-  })
-})
+
+io.on("connection", () => {
+  console.log("a user is connected");
+});
+
+mongooseConnect().catch((err) => console.log(err));
+
+const server = http.listen(3000, () => {
+  console.log(`server is running on port, ${server.address().port} `);
+});
