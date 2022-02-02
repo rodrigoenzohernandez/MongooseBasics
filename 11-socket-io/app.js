@@ -4,7 +4,10 @@ const express = require("express");
 const app = express();
 const mongoose = require(`mongoose`);
 const bodyParser = require("body-parser");
-const dbUrl = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}/${process.env.DB_NAME}`;
+
+const { DB_USER, DB_PASSWORD, DB_HOST, DB_NAME } = process.env;
+
+const dbUrl = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`;
 
 const server = app.listen(3000, () => {
   console.log(`server is running on port, ${server.address().port} `);
